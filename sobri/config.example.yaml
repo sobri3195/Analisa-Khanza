@@ -1,0 +1,35 @@
+db:
+  host: 127.0.0.1
+  port: 3306
+  user: root
+  password: "ganti_password"
+  database: sik
+
+api:
+  endpoint: "https://example.com/api/v1/mapping-khanza"
+  bearer_token: "ganti_token_jika_perlu"
+  timeout_seconds: 30
+
+sync:
+  key_field: id
+  state_file: "sobri/.state/mapping_sync_state.json"
+  query: |
+    SELECT
+      id,
+      kode_provider,
+      kode_layanan_online,
+      kode_poli_khanza,
+      kode_dokter_khanza,
+      nama_layanan_online,
+      aktif,
+      updated_at
+    FROM mapping_online_khanza
+    WHERE aktif='YA'
+    ORDER BY updated_at ASC
+  field_mapping:
+    kode_provider: providerCode
+    kode_layanan_online: serviceCode
+    kode_poli_khanza: khanzaPolyCode
+    kode_dokter_khanza: khanzaDoctorCode
+    nama_layanan_online: serviceName
+    aktif: isActive
