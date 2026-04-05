@@ -15,6 +15,7 @@ Folder ini berisi pondasi **otomasi mapping online Khanza** untuk mengambil data
 - `khanza_online_sync.py` → script Python untuk tarik data SQL dan submit ke API.
 - `config.example.yaml` → contoh konfigurasi DB, endpoint API, query, dan mapping field.
 - `requirements.txt` → dependency Python.
+- `mapping-online-obat-radiologi.md` → template mapping online berhasil untuk domain obat & radiologi.
 
 ## 3) Alur otomasi
 1. Script baca config YAML.
