@@ -3,6 +3,13 @@
     
   </head>
   <body>
+
+    <div id="fitur-interaktif" style="width:3570px;margin:10px auto;font-family:Tahoma,Arial,sans-serif;display:flex;gap:10px;align-items:center;">
+      <label for="cariCepat"><b>🔎 Cari Pasien Cepat:</b></label>
+      <input id="cariCepat" type="text" placeholder="Ketik No.RM, Nama Pasien, atau NIK..." style="padding:6px 10px;min-width:320px;border:1px solid #c9c9c9;border-radius:6px;"/>
+      <button id="resetCari" type="button" style="padding:6px 12px;border:1px solid #888;border-radius:6px;background:#f7f7f7;cursor:pointer;">Reset</button>
+      <span id="ringkasanData" style="font-size:13px;color:#444;"></span>
+    </div>
     <table width="3570px" border="0" align="center" cellpadding="3px" cellspacing="0" class="tbl_form">
       <tr class="isi">
         <td valign="middle" bgcolor="#FFFAFA" align="center" width="10px" rowspan="3">
@@ -731,5 +738,53 @@
         </td>
       </tr>
     </table>
+
+    <script>
+      (function () {
+        const tabel = document.querySelector('table.tbl_form');
+        if (!tabel) return;
+
+        const semuaBaris = Array.from(tabel.querySelectorAll('tr'));
+        const barisData = semuaBaris.filter((baris, index) => index > 2 && baris.querySelectorAll('td').length > 0);
+        const inputCari = document.getElementById('cariCepat');
+        const tombolReset = document.getElementById('resetCari');
+        const ringkasan = document.getElementById('ringkasanData');
+
+        function updateRingkasan() {
+          const terlihat = barisData.filter((baris) => baris.style.display !== 'none').length;
+          ringkasan.textContent = `Menampilkan ${terlihat} dari ${barisData.length} baris pasien`;
+        }
+
+        function normalisasi(teks) {
+          return (teks || '').toLowerCase().replace(/\s+/g, ' ').trim();
+        }
+
+        function filterBaris(keyword) {
+          const kataKunci = normalisasi(keyword);
+          barisData.forEach((baris) => {
+            const sel = baris.querySelectorAll('td');
+            const noRm = sel[1] ? sel[1].textContent : '';
+            const nama = sel[2] ? sel[2].textContent : '';
+            const nik = sel[3] ? sel[3].textContent : '';
+            const gabungan = normalisasi(`${noRm} ${nama} ${nik}`);
+            const cocok = !kataKunci || gabungan.includes(kataKunci);
+            baris.style.display = cocok ? '' : 'none';
+          });
+          updateRingkasan();
+        }
+
+        inputCari.addEventListener('input', function () {
+          filterBaris(this.value);
+        });
+
+        tombolReset.addEventListener('click', function () {
+          inputCari.value = '';
+          filterBaris('');
+          inputCari.focus();
+        });
+
+        updateRingkasan();
+      })();
+    </script>
   </body>
 </html>
